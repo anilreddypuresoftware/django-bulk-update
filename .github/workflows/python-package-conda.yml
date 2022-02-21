@@ -28,6 +28,6 @@ jobs:
         python setup.py install
         pip install -r requirements-dev.txt
         pip install -r requirements-test.txt
-        apt-get install libpq-dev
-        apt-get install python3-Psycopg2
-        tox -e py38
+        pip install -q psycopg2
+        pip install -q mysqlclient
+        coverage run --source=django_bulk_update --omit='django_bulk_update/tests*' runtest.p
