@@ -28,5 +28,11 @@ jobs:
         python setup.py install
         pip install -r requirements-dev.txt
         pip install -r requirements-test.txt
-        tox -e py38
+        if [ $DATABASE_URL == 'postgres://postgres@127.0.0.1/django_bulk_update_test' ]; then pip install -q psycopg2 ; fi
+        if [ $DATABASE_URL == 'mysql://root@127.0.0.1/django_bulk_update_test' ]; then pip install -q 
+        sh -c "if [ '$DATABASE_URL' = 'postgres://postgres@127.0.0.1/django_bulk_update_test' ]; then psql -c 'DROP DATABASE IF EXISTS django_bulk_update_test;' -U postgres; fi"
+        sh -c "if [ '$DATABASE_URL' = 'postgres://postgres@127.0.0.1/django_bulk_update_test' ]; then psql -c 'create database django_bulk_update_test;' -U postgres; fi"
+        sh -c "if [ '$DATABASE_URL' = 'mysql://root@127.0.0.1/django_bulk_update_test' ]; then mysql -e 'create database IF NOT EXISTS django_bulk_update_test CHARACTER SET utf8 COLLATE utf8_general_ci;'; fi"
+        coverage run --source=django_bulk_update --omit='django_bulk_update/tests*' runtest.py
+        
         
