@@ -28,4 +28,5 @@ jobs:
         python setup.py install
         pip install -r requirements-dev.txt
         pip install -r requirements-test.txt
+        pip install psycopg2
         tox -e py38
